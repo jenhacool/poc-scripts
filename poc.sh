@@ -5,9 +5,6 @@ if [ $1 = 'new' ]; then
 	# Create Wordpress site
 	sudo site $2 -wp
 
-	# SSL
-	# sudo echo $4 | site $2 -ssl=on
-
 	# Set defaul site
 	sudo webinoly -default-site=$2
 
@@ -21,7 +18,7 @@ if [ $1 = 'new' ]; then
 	admin_password=$(pwgen -s -1 16)
 
 	# Install Wordpress
-	sudo wp core install --url=https://$2 --title=POC --admin_user=$3 --admin_password=$admin_password --admin_email=$4 --path=/var/www/$2/htdocs --allow-root
+	sudo wp core install --url=$2 --title=POC --admin_user=$3 --admin_password=$admin_password --admin_email=$4 --path=/var/www/$2/htdocs --allow-root
 
 	# Add config
 	sudo wp config set POC_SERVER "${5}" --path=/var/www/$2/htdocs --allow-root
@@ -34,9 +31,6 @@ if [ $1 = 'new' ]; then
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
-
-	# Add cron
-	(crontab -u ubuntu -l; echo "* * * * * sudo poc_cron ${2} ${4}") | crontab -u ubuntu -
 # poc changedomain old_domain new_domain email id
 else
 	sudo cp /var/www/$2/htdocs/wp-config.php /var/www/$2
@@ -78,7 +72,7 @@ else
 			site $i -parked=$3
 			IFS='.' read -r -a array <<< $i
 			sudo sed -i "s/${array[0]}.${array[0]}/${array[0]}/g" /etc/nginx/sites-available/$i && systemctl restart nginx
-			# echo $4 | site $i -ssl=on -root=$1
+			echo $4 | site $i -ssl=on -root=$1
 		fi
 	done
 
