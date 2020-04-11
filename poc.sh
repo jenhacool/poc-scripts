@@ -67,7 +67,7 @@ else
 
 	# SSL for network sites
 	for i in $(wp site list --path=/var/www/$3/htdocs --field=domain --allow-root); do
-	    if [[ -f /etc/nginx/sites-available/$i ]]
+	    if [[ ! -f /etc/nginx/sites-available/$i ]]
 		then
 			site $i -parked=$3
 			IFS='.' read -r -a array <<< $i
