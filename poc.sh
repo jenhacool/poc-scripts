@@ -6,7 +6,7 @@ if [ $1 = 'new' ]; then
 	sudo site $2 -wp
 
 	# SSL
-	sudo echo $4 | site $2 -ssl=on
+	# sudo echo $4 | site $2 -ssl=on
 
 	# Set defaul site
 	sudo webinoly -default-site=$2
@@ -69,21 +69,21 @@ else
 	sudo wp config set DOMAIN_CURRENT_SITE "${3}" --path=/var/www/$3/htdocs --allow-root
 
 	# SSL
-	echo $4 | sudo site $3 -ssl=on
+	# echo $4 | sudo site $3 -ssl=on
 
 	# SSL for network sites
 	for i in $(wp site list --path=/var/www/$3/htdocs --field=domain --allow-root); do
-	    if [[ ! -f /etc/nginx/sites-available/$i ]]
+	    if [[ -f /etc/nginx/sites-available/$i ]]
 		then
 			site $i -parked=$3
 			IFS='.' read -r -a array <<< $i
 			sudo sed -i "s/${array[0]}.${array[0]}/${array[0]}/g" /etc/nginx/sites-available/$i && systemctl restart nginx
-			echo $4 | site $i -ssl=on -root=$1
+			# echo $4 | site $i -ssl=on -root=$1
 		fi
 	done
 
 	# Remove old crontab job
-	crontab -l | grep -v "sudo poc_cron" | crontab -
+	crontab -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
