@@ -63,7 +63,7 @@ else
 	sudo wp config set DOMAIN_CURRENT_SITE "${3}" --path=/var/www/$3/htdocs --allow-root
 
 	# SSL
-	# echo $4 | sudo site $3 -ssl=on
+	echo $4 | sudo site $3 -ssl=on
 
 	# SSL for network sites
 	for i in $(wp site list --path=/var/www/$3/htdocs --field=domain --allow-root); do
