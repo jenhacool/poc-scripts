@@ -5,9 +5,6 @@ if [ $1 = 'new' ]; then
 	# Create Wordpress site
 	sudo site $2 -wp
 
-	# SSL
-	# sudo echo $4 | site $2 -ssl=on
-
 	# Set defaul site
 	sudo webinoly -default-site=$2
 
@@ -34,9 +31,6 @@ if [ $1 = 'new' ]; then
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
-
-	# Add cron
-	(crontab -u ubuntu -l; echo "* * * * * sudo poc_cron ${2} ${4}") | crontab -u ubuntu -
 # poc changedomain old_domain new_domain email id
 else
 	sudo cp /var/www/$2/htdocs/wp-config.php /var/www/$2
