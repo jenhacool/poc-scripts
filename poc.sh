@@ -18,7 +18,7 @@ if [ $1 = 'new' ]; then
 	admin_password=$(pwgen -s -1 16)
 
 	# Install Wordpress
-	sudo wp core install --url=https://$2 --title=POC --admin_user=$3 --admin_password=$admin_password --admin_email=$4 --path=/var/www/$2/htdocs --allow-root
+	sudo wp core install --url=$2 --title=POC --admin_user=$3 --admin_password=$admin_password --admin_email=$4 --path=/var/www/$2/htdocs --allow-root
 
 	# Add config
 	sudo wp config set POC_SERVER "${5}" --path=/var/www/$2/htdocs --allow-root
