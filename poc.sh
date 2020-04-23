@@ -76,6 +76,9 @@ else
 		fi
 	done
 
+	# Install POC plugin
+	sudo wp plugin install "https://poc.foundation/uploads/poc.zip"  --activate-network--path=/var/www/$3/htdocs --allow-root
+
 	# Remove old crontab job
 	crontab -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -
 
