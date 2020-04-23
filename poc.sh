@@ -80,7 +80,7 @@ else
 	sudo wp plugin install "https://poc.foundation/uploads/poc.zip"  --activate-network--path=/var/www/$3/htdocs --allow-root
 
 	# Remove old crontab job
-	crontab -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -
+	crontab -u ubuntu -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -u ubuntu -
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
