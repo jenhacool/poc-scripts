@@ -77,7 +77,13 @@ else
 	done
 
 	# Install POC plugin
-	sudo wp plugin install "https://poc.foundation/uploads/poc.zip"  --activate-network--path=/var/www/$3/htdocs --allow-root
+	sudo wp plugin install "https://poc.foundation/uploads/poc.zip" --activate-network --path=/var/www/$3/htdocs --allow-root
+
+	# Disable TwentyTwenty theme
+	sudo wp theme disable twentytwenty --network --path=/var/www/$3/htdocs --allow-root
+
+	# Enable TwentySeventeen theme
+	sudo wp theme enable twentyseventeen --network --activate --path=/var/www/$3/htdocs --allow-root
 
 	# Remove old crontab job
 	crontab -u ubuntu -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -u ubuntu -
