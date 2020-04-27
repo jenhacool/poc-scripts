@@ -26,8 +26,8 @@ if [ $1 = 'new' ]; then
 	# Multisite convert
 	sudo wp core multisite-convert --path=/var/www/$2/htdocs --subdomains --allow-root
 
-	# Send login information
-	curl -X GET "https://client.hostletter.com/poc.php?server_id=${5}&username=${3}&password=${admin_password}"
+	# Send notification
+	curl -X GET "https://client.hostletter.com/poc.php?server_id=${5}&status=installed"
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
@@ -85,8 +85,19 @@ else
 	# Enable TwentySeventeen theme
 	sudo wp theme enable twentyseventeen --network --activate --path=/var/www/$3/htdocs --allow-root
 
+	# Set admin userpassword
+	admin_password=$(pwgen -s -1 16)
+
+	sudo wp user update 1 --user_pass=$admin_password --path=/var/www/$3/htdocs --allow-root
+
 	# Remove old crontab job
 	crontab -u ubuntu -l | grep -v "sudo poc_cron ${2} ${4}" | crontab -u ubuntu -
+
+	# Get username
+	username=$(sudo wp user get 1 --field=user_login --path=/var/www/$3/htdocs --allow-root)
+
+	# Send login information
+	curl -X GET "https://client.hostletter.com/poc.php?server_id=${5}&status=domain_added&username=${username}&password=${admin_password}"
 
 	# Callback
 	curl -X GET "https://api.hostletter.com/api/server/${5}/complete"
